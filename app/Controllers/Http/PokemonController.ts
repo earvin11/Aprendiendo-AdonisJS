@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
 export default class PokemonController {
     // public async index({ request, response }: HttpContextContract) {
@@ -56,12 +57,38 @@ export default class PokemonController {
     }
 
     public async store({ request, response }: HttpContextContract) {
-        response.status(201)
-        const { userName, password }  = request.body();
-        return {
-            ok: false,
-            userName,
-            password
+
+                /**
+         * Step 1 - Define schema
+         */
+        const newUserSchema = schema.create({
+            userName: schema.string(),
+            password: schema.string([
+            rules.minLength(4)
+            ])
+        })
+
+        try {
+            /**
+             * Step 2 - Validate request body against
+             *          the schema
+             */
+            const payload = await request.validate({
+            schema: newUserSchema
+            })
+
+            response.status(201)
+            return {
+                ok: true,
+                payload
+        }
+
+
+        } catch (error) {
+            /**
+             * Step 3 - Handle errors
+             */
+            response.badRequest(error.messages)
         }
     }
 
