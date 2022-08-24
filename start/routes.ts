@@ -36,4 +36,6 @@ Route.group( () => {
 
   Route.resource('pokemon', 'PokemonController').apiOnly();
 
+  Route.post('auth/login', 'AuthController.login');
+
 }).prefix('api')
