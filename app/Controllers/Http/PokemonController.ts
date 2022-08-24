@@ -62,7 +62,7 @@ export default class PokemonController {
          * Step 1 - Define schema
          */
         const newUserSchema = schema.create({
-            userName: schema.string(),
+            username: schema.string(),
             password: schema.string([
             rules.minLength(4)
             ])
